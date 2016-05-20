@@ -53,19 +53,7 @@ class CMAB:
 
 
 def main():
-	
-	agent = CMAB()
-	print agent.N_strategies
-	agent = CMAB(4)
-	print agent.N_strategies
-	agent.reward(1)
-	agent.reward(1)
-	agent.reward(0)
-	agent.reward(0)
-	agent.reward(1)
-	agent.reward(1)
-	print agent.rewards
-	print agent.strategies
+	pass
 
 if __name__ == '__main__':
 	main()
