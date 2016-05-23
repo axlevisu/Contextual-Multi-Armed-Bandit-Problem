@@ -2,7 +2,7 @@ from scipy.stats import beta
 from scipy.integrate import quad
 from random import randint
 import numpy as np
-from operator import add
+from operator import add, mul
 
 
 
@@ -12,23 +12,28 @@ class CMAB:
 	strategies = []
 	current_strategy = None
 	strategy_info = None
+	weight_factor = 3
 	#Constructor
-	def __init__(self, number_of_strategies = 6):
+	def __init__(self, number_of_strategies = 6, steps = 1, weights = [1]):
 		self.N_strategies = number_of_strategies
 		#Somehow this should be changed according to average of thetha vectors of other users
 		self.Param = [1.0/self.N_strategies]*self.N_strategies    #Optimality Probability Array (P(S|Dt U X))	#D is information available before reward
 		self.strategy_info = [[0,0]]*self.N_strategies
 		self.current_strategy = randint(0,self.N_strategies-1)
+		self.steps = steps
+		self.weights = [weight*self.weight_factor/sum(weights) for weight in weights ]
 	#Returns strategy 
 	def strategy(self): 
 		return self.current_strategy
 	#This method gives strategy to be used for new reward
 
 	def reward(self, x):
+		if not isinstance(x, list):
+			x = [x]
 		#Figure Out Why It's not working
 		# self.strategy_info[self.current_strategy][0] = (self.strategy_info[self.current_strategy][0]) + x
 		# self.strategy_info[self.current_strategy][1] = (self.strategy_info[self.current_strategy][1]) + 1
-		self.strategy_info[self.current_strategy] = map(add, [x,1], self.strategy_info[self.current_strategy])
+		self.strategy_info[self.current_strategy] = map(add, [sum(map(mul,x,self.weights)),sum(self.weights)], self.strategy_info[self.current_strategy])
 		self.rewards.append(x)
 		self.strategies.append(self.current_strategy)
 		def wat(x, s_n, ar):
