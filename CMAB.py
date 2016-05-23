@@ -12,7 +12,7 @@ class CMAB:
 	strategies = []
 	current_strategy = None
 	strategy_info = None
-	weight_factor = 3
+	weight_factor = 1
 	#Constructor
 	def __init__(self, number_of_strategies = 6, steps = 1, weights = [1]):
 		self.N_strategies = number_of_strategies
@@ -20,8 +20,12 @@ class CMAB:
 		self.Param = [1.0/self.N_strategies]*self.N_strategies    #Optimality Probability Array (P(S|Dt U X))	#D is information available before reward
 		self.strategy_info = [[0,0]]*self.N_strategies
 		self.current_strategy = randint(0,self.N_strategies-1)
+		if len(weights) is 1 and weights[0] is 1:
+			weights = [1]*steps
+
+		else: steps = len(weights)
 		self.steps = steps
-		self.weights = [weight*self.weight_factor/sum(weights) for weight in weights ]
+		self.weights = [float(weight*self.weight_factor)/sum(weights) for weight in weights ]
 	#Returns strategy 
 	def strategy(self): 
 		return self.current_strategy
@@ -33,6 +37,7 @@ class CMAB:
 		#Figure Out Why It's not working
 		# self.strategy_info[self.current_strategy][0] = (self.strategy_info[self.current_strategy][0]) + x
 		# self.strategy_info[self.current_strategy][1] = (self.strategy_info[self.current_strategy][1]) + 1
+		# print x, self.weights
 		self.strategy_info[self.current_strategy] = map(add, [sum(map(mul,x,self.weights)),sum(self.weights)], self.strategy_info[self.current_strategy])
 		self.rewards.append(x)
 		self.strategies.append(self.current_strategy)
