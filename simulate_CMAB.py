@@ -11,12 +11,13 @@ def make_user(steps,N):
 	return user
 precision = 3
 N_Random_users = 3
-N_inter = 24
+N_inter = 100
 users = []
 N_strategies = 6
 # stats = []
 # temp = []
 total_regret = 0
+total_percent = 0
 print "Number of interactions:", N_inter
 print "Number of strategies:", N_strategies
 
@@ -50,7 +51,6 @@ for j in xrange(N_Random_users):
 
 print "Number of users:", len(users)
 for id in users:
-	regret = 0
 	users[id][0] = make_user(steps, N_strategies)
 	weights = users[id][0].weights
 	for s in xrange(N_inter):
@@ -70,11 +70,15 @@ for id in users:
 	regret = max([map(mul,x,weights)[0] for x in users[id][1]]) - sum(map(mul, [map(mul,x,weights)[0] for x in users[id][1]], users[id][2]))
 	users[id].append(regret)  
 	total_regret = total_regret + regret
-
+	percent = regret*100/max([map(mul,x,weights)[0] for x in users[id][1]])
+	total_percent = total_percent + percent
 	print "User", id, ":"
 	print map(list,zip(*[users[id][1], users[id][3]]))	#Contains temp and stats clubbed
 	print map(list,zip(*[users[id][0].strategies, users[id][0].rewards]))
 	print "Regret:", regret
+	print "Regret Percentage:", regret*100/max([map(mul,x,weights)[0] for x in users[id][1]])
 	
 total_regret = total_regret/len(users)
+total_percent = total_percent/len(users)
 print "Total Regret:", total_regret 
+print "Total Regret Percentage:", total_percent 
