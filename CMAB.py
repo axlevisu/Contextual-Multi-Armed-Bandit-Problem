@@ -8,11 +8,6 @@ from operator import add, mul
 
 #Contextual Multi-Armed Bandit for Bernoulli Case
 class CMAB:
-	rewards = []
-	strategies = []
-	current_strategy = None
-	strategy_info = None
-	weight_factor = 1
 	#Constructor
 	def __init__(self, number_of_strategies = 6, steps = 1, weights = [1]):
 		self.N_strategies = number_of_strategies
@@ -24,6 +19,9 @@ class CMAB:
 			weights = [1]*steps
 
 		else: steps = len(weights)
+		self.strategies =[]
+		self.rewards =[]
+		self.weight_factor = 1
 		self.steps = steps
 		self.weights = [float(weight*self.weight_factor)/sum(weights) for weight in weights ]
 	#Returns strategy 
